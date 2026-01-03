@@ -5,11 +5,17 @@ import java.time.LocalDateTime;
 import com.fertech.smartqr.dto.request.EnterpriseCreateRequestDto;
 import com.fertech.smartqr.dto.request.EnterpriseUpdateRequestDto;
 import com.fertech.smartqr.dto.response.EnterpriseResponseDto;
+import com.fertech.smartqr.mappers.generic.GenericMapper;
 import com.fertech.smartqr.model.Enterprise;
 
-public final class EnterpriseMapper {
+public final class EnterpriseMapper implements GenericMapper <
+        Enterprise, 
+        EnterpriseCreateRequestDto, 
+        EnterpriseUpdateRequestDto, 
+        EnterpriseResponseDto> {
     
-    public static Enterprise toEntity (EnterpriseCreateRequestDto dto) {
+    @Override
+    public Enterprise toEntity (EnterpriseCreateRequestDto dto) {
         return Enterprise.builder()
         .code(dto.code())
         .name(dto.name())
@@ -17,7 +23,8 @@ public final class EnterpriseMapper {
         .build();
     }
 
-    public static EnterpriseResponseDto toResponse (Enterprise entity) {
+    @Override
+    public EnterpriseResponseDto toResponse (Enterprise entity) {
         return new EnterpriseResponseDto(
             entity.getId(),
             entity.getCode(),
@@ -26,7 +33,8 @@ public final class EnterpriseMapper {
         );
     }
 
-    public static void merge (Enterprise entity, EnterpriseUpdateRequestDto dto) {
+    @Override
+    public void merge (Enterprise entity, EnterpriseUpdateRequestDto dto) {
         if (dto.code() != null) {
             entity.setCode(dto.code());
         }

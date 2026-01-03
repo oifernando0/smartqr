@@ -10,23 +10,23 @@ import com.fertech.smartqr.mappers.EnterpriseMapper;
 import com.fertech.smartqr.model.Enterprise;
 import com.fertech.smartqr.repositories.EnterpriseRepository;
 
-
-
 @Service
 public class EnterpriseService {
     
     private final EnterpriseRepository repo;
+    private final EnterpriseMapper mapper;
 
-    public EnterpriseService (EnterpriseRepository repo) {
+    public EnterpriseService (EnterpriseRepository repo, EnterpriseMapper mapper) {
         this.repo = repo;
+        this.mapper = mapper;
     }
 
     @Transactional
     public EnterpriseResponseDto create (EnterpriseCreateRequestDto dto) {
 
-        Enterprise enterprise = EnterpriseMapper.toEntity(dto);
+        Enterprise enterprise = mapper.toEntity(dto);
 
-        return EnterpriseMapper.toResponse(
+        return mapper.toResponse(
             repo.save(enterprise)
         );
     }
@@ -41,9 +41,9 @@ public class EnterpriseService {
         Enterprise entity = repo.findById(id).orElseThrow(
             () -> new RuntimeException("ENtidade não existe")
         );
-        EnterpriseMapper.merge(entity, dto);
+        mapper.merge(entity, dto);
 
-        return EnterpriseMapper.toResponse(
+        return mapper.toResponse(
             repo.save(entity)
         );
     }
@@ -63,6 +63,7 @@ public class EnterpriseService {
         Enterprise entity = repo.findById(id).orElseThrow(
             () -> new RuntimeException("Entidade inexistente")
         );
-        return EnterpriseMapper.toResponse(entity);
+        return mapper.toResponse(entity);
     }
+
 }
